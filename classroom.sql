@@ -71,7 +71,6 @@ VALUES
 (3, "CASEY", 4000);
 
 SELECT * FROM SALARY;
-
 -- ------------------
 -- Constraints
 -- ------------------
@@ -106,7 +105,7 @@ FOREIGN KEY (cust_id) references customer (id)
 );
 
 -- ------------
--- select
+-- operator
 -- ------------
 -- sample
 CREATE TABLE student (
@@ -127,6 +126,148 @@ VALUES
 SELECT name, marks FROM student; 
 -- find distinct/unique
 SELECT DISTINCT city FROM student;
--- where clauses /conditions
+-- where clause operators
+/*Where Clause
+Using Operators in WHERE
+Arithmetic Operators: +(addition), -(subtraction), *(multiplication), /(division), %(modulus)
+Comparison Operators: = (equal to), != (not equal to), > , >=, <, <=
+Logical Operators: AND, OR, NOT, IN, BETWEEN, ALL, LIKE, ANY
+Bitwise Operators: & (Bitwise AND), | (Bitwise OR)*/
+-- where clauses /conditions example
 SELECT * FROM student
-WHERE marks > 80
+WHERE marks > 80;
+-- and 
+SELECT *
+FROM student
+WHERE marks > 80 AND city = "Mumbai";
+-- or
+SELECT *
+FROM student
+WHERE marks > 80 OR city = "Mumbai";
+-- between
+SELECT *
+FROM student
+WHERE marks BETWEEN 80 AND 90;
+-- in
+SELECT *
+FROM student
+WHERE city IN ( "Mumbai, delhi", "Dhaka" );
+-- in
+SELECT *
+FROM student
+WHERE city NOT IN ( "Mumbai, delhi", "Dhaka" );
+-- limit
+SELECT *
+FROM student where marks < 75
+LIMIT 3;
+-- order by ase 
+SELECT *
+FROM student
+ORDER BY city ASC;
+SELECT *
+FROM student
+ORDER BY marks ASC;
+-- order by desc
+SELECT *
+FROM student
+ORDER BY marks DESC
+LIMIT 3;
+
+/*Aggregate Functions
+Aggregare functions perform a calculation on a set of values, and return a single value.
+• COUNT()
+• MAX()
+• MIN()
+• SUM()
+• AVG()*/
+-- max
+SELECT MAX(marks)
+FROM student;
+-- min
+SELECT MIN(marks)
+FROM student;
+-- avg
+SELECT AVG(marks)
+FROM student;
+-- count
+SELECT COUNT(rollno)
+FROM student;
+-- Group By Clause
+/*Groups rows that have the same values into summary rows.
+It collects data from multiple records and groups the result by one or more column.*/
+-- group by
+SELECT city,name, COUNT(rollno)
+FROM student
+GROUP BY city,name;
+SELECT city, AVG(marks)
+FROM student
+GROUP BY city;
+
+/*Practice Qs
+Write the Query to find avg marks in each city in ascending order.*/
+SELECT city, AVG(marks)
+FROM student
+GROUP BY city 
+ORDER BY city ASC;
+
+SELECT grade, count(rollno)
+FROM student
+GROUP BY grade
+ORDER BY grade;
+-- Having Clause
+/*Similar to Where i.e. applies some condition on rows.
+Used when we want to apply any condition after grouping.*/
+-- having example
+SELECT city, count(rollno)
+FROM student
+GROUP BY city
+HAVING MAX(marks) > 90;
+-- order
+/*General Order
+SELECT column(s)
+FROM table_name
+WHERE condition
+GROUP BY column(s)
+HAVING condition
+ORDER BY column(s) ASC;*/
+-- example 
+SELECT city
+FROM student
+WHERE grade ="A"
+GROUP BY city
+HAVING MAX(marks) >= 93
+ORDER BY city ASC;
+
+-- safe moode off
+SET SQL_SAFE_UPDATES = 0;
+-- update set
+UPDATE student
+SET grade="O"
+WHERE grade="A";
+UPDATE student
+SET marks=20
+WHERE rollno=105;
+UPDATE student
+SET grade ="B"
+WHERE marks BETWEEN 80 AND 90;
+UPDATE student
+SET marks=marks+1;
+-- delete set
+Insert student VALUES (111, "anik", 29, "C", "Dhaka");
+DELETE FROM student
+WHERE marks < 30;
+
+SELECT * FROM student;
+-- -----------
+-- Forign key
+-- -----------
+CREATE TABLE dept (
+id INT PRIMARY KEY,
+name VARCHAR (50));
+
+CREATE TABLE teacher (
+id INT PRIMARY KEY,
+name VARCHAR (50) ,
+dept_id INT,
+FOREIGN KEY (dept_id) REFERENCES dept(id)
+);
