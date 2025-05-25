@@ -261,13 +261,170 @@ SELECT * FROM student;
 -- -----------
 -- Forign key
 -- -----------
+-- dept create
 CREATE TABLE dept (
 id INT PRIMARY KEY,
 name VARCHAR (50));
-
+-- teacher create
 CREATE TABLE teacher (
 id INT PRIMARY KEY,
 name VARCHAR (50) ,
 dept_id INT,
 FOREIGN KEY (dept_id) REFERENCES dept(id)
 );
+-- Cascading for FK child & parents on update/delete 
+DROP TABLE teacher;
+-- teacher drop and create
+CREATE TABLE teacher (
+id INT PRIMARY KEY,
+name VARCHAR (50) ,
+dept_id INT,
+FOREIGN KEY (dept_id) REFERENCES dept(id)
+ON DELETE CASCADE 
+ON UPDATE CASCADE
+);
+INSERT INTO dept
+VALUES
+(101, "english"),
+(102, "IT");
+INSERT INTO teacher
+VALUES
+(101, "adam", 101),
+(102, "mafee", 102),
+(103, "shafe", 101);
+-- update korle duitai pudate hoya jay
+UPDATE dept
+SET id =105
+WHERE id =101;
+
+Select * FROM teacher;
+-- --------------------
+-- Alter (to change the schema)
+-- -------------------
+-- add column
+ALTER TABLE student
+ADD COLUMN age INT DEFAULT 18;
+-- drop column
+ALTER TABLE student
+DROP COLUMN age;
+-- change/rename column
+ALTER TABLE student
+CHANGE COLUMN age user INT ;
+-- rename table
+ALTER TABLE student
+RENAME TO stu ;
+ALTER TABLE stu
+RENAME TO student ;
+-- modify column
+ALTER TABLE student
+MODIFY COLUMN user VARCHAr(3);
+
+INSERT INTO student
+values
+(111,"rono", 87, "A", "dhaka", "rn");
+
+SELECT * FROM student;
+-- truncate delete all from table
+TRUNCATE TABLE SALARY;
+
+SELECT * FROM SALARY;
+
+/*Joins in SQL
+Join is used to combine rows from two or more tables, based on a related column between them.
+Inner Join
+Outer Joins Left Join RightJoin Full Join*/
+CREATE DATABASE college;
+USE college;
+
+CREATE TABLE student(
+id INT PRIMARY KEY,
+name VARCHAR(50)
+);
+
+INSERT INTO student
+VALUES
+(101, "rono"),
+(102, "saiful"),
+(103, "rupon"),
+(104, "tanjim");
+
+CREATE TABLE courses(
+id INT PRIMARY KEY,
+courses VARCHAR(50)
+);
+
+INSERT INTO courses
+VALUES
+(102, "EEE"),
+(101, "civil"),
+(105, "CSE"),
+(104, "BBA");
+
+TRUNCATE table courses;
+SELECT * FROM student;
+-- iner join 
+SELECT * FROM student
+INNER JOIN courses
+ON student.id = courses.id;
+-- alies name inner join
+SELECT * FROM student AS s
+INNER JOIN courses AS c
+ON s.id = c.id;
+-- left join
+SELECT *
+FROM student as a
+LEFT JOIN courses as b
+ON a.id = b.id;
+-- right join
+SELECT *
+FROM student as a
+RIGHT JOIN courses as b
+ON a.id = b.id;
+-- full/union join 
+SELECT *
+FROM student as a
+LEFT JOIN courses as b
+ON a.id = b.id
+UNION
+SELECT *
+FROM student as a
+RIGHT JOIN courses as b
+ON a.id = b.id;
+-- left exclusive join
+SELECT *
+FROM student as a
+LEFT JOIN courses as b
+ON a.id = b.id
+WHERE b.id IS NULL;
+-- right exclusive join
+SELECT *
+FROM student as a
+RIGHT JOIN courses as b
+ON a.id = b.id
+WHERE a.id IS NULL;
+-- full exclusive join
+SELECT *
+FROM student as a
+LEFT JOIN courses as b
+ON a.id = b.id
+WHERE b.id IS NULL
+UNION
+SELECT *
+FROM student as a
+RIGHT JOIN courses as b
+ON a.id = b.id
+WHERE a.id IS NULL;
+-- self join data
+CREATE TABLE employee ( id INT PRIMARY KEY, name VARCHAR (50), manager_id INT);
+INSERT INTO employee (id, name, manager_id)
+VALUES
+(101, "adam", 103),
+(102,"bob", 104),
+(103,"casey", NULL),
+(104, "donald", 103);
+SELECT * FROM employee;
+-- self join
+SELECT a.name, b.name
+FROM employee as a
+JOIN employee as b
+ON a.id = b.manager_id;
