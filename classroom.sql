@@ -92,7 +92,8 @@ id INT,
 salary INT DEFAULT 25000);
 INSERT INTO emp (id) VALUES (101);
 -- check 
-CREATE TABLE City ( id INT PRIMARY KEY, city VARCHAR (50), age INT,
+CREATE TABLE City ( 
+id INT PRIMARY KEY, city VARCHAR (50), age INT,
 CONSTRAINT age_check CHECK (age >= 18 AND city="Delhi")
 );
 -- instaint check
@@ -100,8 +101,8 @@ CREATE TABLE newTab (
 age INT CHECK (age >= 18)
 ) ;
 -- foreign key
-CREATE TABLE temp ( cust_id int,
-FOREIGN KEY (cust_id) references customer (id)
+CREATE TABLE temp ( 
+cust_id int,FOREIGN KEY (cust_id) references customer (id)
 );
 
 -- ------------
@@ -121,11 +122,13 @@ VALUES
 (104, "dhruv", 96, "A", "Delhi"), 
 (105, "emanuel", 12, "F", "Delhi"), 
 (106, "farah", 82, "B", "Delhi");
+TRUNCATE TABLE student;
 
 -- find individual column
 SELECT name, marks FROM student; 
 -- find distinct/unique
 SELECT DISTINCT city FROM student;
+
 -- where clause operators
 /*Where Clause
 Using Operators in WHERE
@@ -133,6 +136,7 @@ Arithmetic Operators: +(addition), -(subtraction), *(multiplication), /(division
 Comparison Operators: = (equal to), != (not equal to), > , >=, <, <=
 Logical Operators: AND, OR, NOT, IN, BETWEEN, ALL, LIKE, ANY
 Bitwise Operators: & (Bitwise AND), | (Bitwise OR)*/
+
 -- where clauses /conditions example
 SELECT * FROM student
 WHERE marks > 80;
@@ -254,6 +258,7 @@ UPDATE student
 SET marks=marks+1;
 -- delete set
 Insert student VALUES (111, "anik", 29, "C", "Dhaka");
+
 DELETE FROM student
 WHERE marks < 30;
 
@@ -424,7 +429,77 @@ VALUES
 (104, "donald", 103);
 SELECT * FROM employee;
 -- self join
-SELECT a.name, b.name
+SELECT a.name AS manager_name, b.name
 FROM employee as a
 JOIN employee as b
 ON a.id = b.manager_id;
+-- union 
+SELECT name FROM employee
+UNION
+SELECT name FROM employee;
+-- union all
+SELECT name FROM employee
+UNION ALL
+SELECT name FROM employee;
+-- sub quary
+-- sample
+CREATE TABLE friend (
+rollno INT PRIMARY KEY, name VARCHAR (50), marks INT NOT NULL, grade VARCHAR (1), city VARCHAR (20)
+) ;
+
+INSERT INTO friend
+(rollno, name, marks, grade, city)
+VALUES
+(101, "anik", 78, "C", "Polton"),
+(102, "bhuttu", 93, "A", "Mirpur"),
+(103, "kajol", 85, "B", "Mohammadpur"),
+(104, "dhrubo", 96, "A", "Dhanmondi"), 
+(105, "emanuel", 82, "F", "Badda"), 
+(106, "fahad", 82, "B", "Mohammadpur");
+TRUNCATE TABLE friend;
+
+-- find the students who has greater score then avg students 
+-- where sub final query
+SELECT name, marks
+FROM friend
+WHERE marks > (SELECT AVG(marks) FROM friend);
+-- 2 query
+SELECT AVG (marks)
+FROM friend;
+-- 1 query 
+SELECT name, marks
+FROM friend
+WHERE marks > 87.6667;
+-- 1st query find the even number
+SELECT 	rollno 
+FROM friend 
+WHERE rollno % 2= 0;
+-- call the name of the even number final query
+SELECT name, rollno
+FROM friend
+WHERE rollno IN (
+      SELECT rollno 
+      FROM friend 
+      WHERE rollno % 2= 0
+);
+-- from sub
+-- find a specific city friend max number 
+-- 1st query table of the specific city
+SELECT *
+FROM friend
+WHERE city = "Mohammadpur";
+-- max number final query
+SELECT MAX(marks)
+FROM (
+SELECT *
+FROM friend
+WHERE city = "Mohammadpur"
+) AS temp;
+-- select sub
+SELECT (SELECT MAX(marks) FROM friend), name
+FROM friend;
+-- views / virtual table
+CREATE VIEW view1 AS
+SELECT rollno, name, marks FROM friend;
+
+SELECT * FROM view1
